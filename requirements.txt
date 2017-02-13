@@ -1,0 +1,2 @@
+dateutil==2.5.3
+icalendar==3.11.2

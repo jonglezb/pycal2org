@@ -1,4 +1,5 @@
 import sys
+import os
 import datetime
 import argparse
 from string import Template
@@ -34,6 +35,18 @@ class Converter(object):
 
     def __init__(self, args):
         self.args = args
+
+    def read_template(self):
+        # Look for template in the current dir first, then in the same
+        # directory as the program.
+        program_dir = os.path.dirname(sys.argv[0])
+        try:
+            f = open(self.args.template, 'r')
+        except IOError:
+            f = open(os.path.join(program_dir, self.args.template), 'r')
+        with f:
+            template = Template(f.read())
+        return template
 
     def tz_localize(self, dt):
         """Convert a datetime object to the local timezone.  This is not as
@@ -120,8 +133,7 @@ class Converter(object):
         return dates
 
     def generate_org_fragment(self, event):
-        with open(args.template, 'r') as f:
-            template = Template(f.read())
+        template = self.read_template()
         data = {
             'dates': '\n  '.join(self.generate_dates(event)),
         }

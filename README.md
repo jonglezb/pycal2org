@@ -8,8 +8,9 @@ org-mode calendar
 It also supports recurring events, with proper handling of excluded dates and
 so on (using the excellent dateutil.rrule library).
 
-Note that, by default, all times are converted to the local timezone, because
-org-mode has no support for specifying the timezone.
+Note that, by default, all times are converted to the local (system) timezone,
+because org-mode has no support for specifying the timezone.  You can override
+the output timezone using the --tz option.
 
 ## Install
 
@@ -28,7 +29,6 @@ package manager, or just install them locally:
 
 ## TODO list
 
-- general polishing (command-line arguments, etc)
 - add more metadata to the output (event location, etc)
 - when fetching a remote ics source, merge it with the previous fetch
   (so that if some events have been removed in the remote source, we

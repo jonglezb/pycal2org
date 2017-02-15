@@ -39,9 +39,8 @@ class Converter(object):
         For convenience, date objects are returned unchanged.
 
         """
-        timezone = self.args.tz if self.args.tz != None else tz.tzlocal()
         if is_datetime(dt):
-            return dt.astimezone(timezone)
+            return dt.astimezone(self.args.tz)
         elif is_date(dt):
             return dt
         else:
@@ -148,8 +147,9 @@ def timezone(s):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("input_file", help="Input ICS file to convert")
-    parser.add_argument("--tz", type=timezone, help="Timezone to convert to, "
-                        "for instance 'Europe/Paris' (default: system timezone)")
+    parser.add_argument("--tz", type=timezone, default=tz.tzlocal(),
+                        help="Timezone to convert to, for instance "
+                        "'Europe/Paris' (default: system timezone)")
     parser.add_argument("--template", default="template.org",
                         help="Org-mode template to use for each event "
                         "(default: '%(default)s')")

@@ -131,6 +131,9 @@ class Converter(object):
                 data[field] = event[field]
             else:
                 data[field] = ""
+        # Add a space in front of each line of the description, to avoid
+        # stars (*) being interpreted as headlines by org-mode.
+        data['description'] = data['description'].replace('\n', '\n ')
         return template.substitute(data)
 
     def print_ical(self):

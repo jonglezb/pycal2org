@@ -6,6 +6,6 @@
 - Organizer: ${organizer}
 - Status: ${status}
 
-${description}
+ ${description}
 
 - URL: ${url}

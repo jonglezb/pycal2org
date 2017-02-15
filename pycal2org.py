@@ -1,6 +1,7 @@
 import sys
 import datetime
 import argparse
+from string import Template
 
 import icalendar
 from dateutil import rrule, tz
@@ -116,14 +117,19 @@ class Converter(object):
         return dates
 
     def generate_org_fragment(self, event):
-        s = ''
-        s += '* {}\n'.format(event['summary'])
-        for date in self.generate_dates(event):
-            s += '  {}\n'.format(date)
-        s += '\n'
-        if 'description' in event:
-            s += event['description'] + '\n'
-        return s
+        with open(args.template, 'r') as f:
+            template = Template(f.read())
+        data = {
+            'summary': event['summary'],
+            'dates': '\n  '.join(self.generate_dates(event)),
+        }
+        # Optional fields
+        for field in ['description']:
+            if field in event:
+                data[field] = event[field]
+            else:
+                data[field] = ""
+        return template.substitute(data)
 
     def print_ical(self):
         with open(self.args.input_file, 'r') as f:
@@ -144,6 +150,9 @@ if __name__ == '__main__':
     parser.add_argument("input_file", help="Input ICS file to convert")
     parser.add_argument("--tz", type=timezone, help="Timezone to convert to, "
                         "for instance 'Europe/Paris' (default: system timezone)")
+    parser.add_argument("--template", default="template.org",
+                        help="Org-mode template to use for each event "
+                        "(default: '%(default)s')")
     args = parser.parse_args()
     c = Converter(args)
     c.print_ical()

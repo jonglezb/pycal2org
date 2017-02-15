@@ -38,8 +38,9 @@ class Converter(object):
         For convenience, date objects are returned unchanged.
 
         """
+        timezone = self.args.tz if self.args.tz != None else tz.tzlocal()
         if is_datetime(dt):
-            return dt.astimezone(tz.tzlocal())
+            return dt.astimezone(timezone)
         elif is_date(dt):
             return dt
         else:
@@ -130,10 +131,19 @@ class Converter(object):
         for event in cal.walk('vevent'):
             print(self.generate_org_fragment(event))
 
+def timezone(s):
+    timezone = tz.gettz(s)
+    if timezone == None:
+        msg = "'{}' is not a valid timezone".format(s)
+        raise argparse.ArgumentTypeError(msg)
+    return timezone
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("input_file", help="Input ICS file to convert")
+    parser.add_argument("--tz", type=timezone, help="Timezone to convert to, "
+                        "for instance 'Europe/Paris' (default: system timezone)")
     args = parser.parse_args()
     c = Converter(args)
     c.print_ical()

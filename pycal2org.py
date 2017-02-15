@@ -28,6 +28,10 @@ def datetime_format(dt):
 
 class Converter(object):
 
+    OPTIONAL_EVENT_FIELDS = ('summary', 'description', 'location',
+                             'categories', 'organizer', 'status',
+                             'transp', 'url')
+
     def __init__(self, args):
         self.args = args
 
@@ -119,11 +123,10 @@ class Converter(object):
         with open(args.template, 'r') as f:
             template = Template(f.read())
         data = {
-            'summary': event['summary'],
             'dates': '\n  '.join(self.generate_dates(event)),
         }
         # Optional fields
-        for field in ['description']:
+        for field in self.OPTIONAL_EVENT_FIELDS:
             if field in event:
                 data[field] = event[field]
             else:

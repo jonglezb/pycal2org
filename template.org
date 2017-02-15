@@ -1,4 +1,11 @@
 * ${summary}
   ${dates}
 
+- Location: ${location}
+- Categories: ${categories}
+- Organizer: ${organizer}
+- Status: ${status}
+
 ${description}
+
+- URL: ${url}

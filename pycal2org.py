@@ -1,5 +1,6 @@
 import sys
 import datetime
+import argparse
 
 import icalendar
 from dateutil import rrule, tz
@@ -117,12 +118,15 @@ def generate_org_fragment(event):
         s += event['description'] + '\n'
     return s
 
-def print_ical(filename):
-    with open(filename, 'r') as f:
+def print_ical(args):
+    with open(args.input_file, 'r') as f:
         cal = icalendar.Calendar.from_ical(f.read())
     for event in cal.walk('vevent'):
         print(generate_org_fragment(event))
 
 
 if __name__ == '__main__':
-    print_ical(sys.argv[1])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_file", help="Input ICS file to convert")
+    args = parser.parse_args()
+    print_ical(args)

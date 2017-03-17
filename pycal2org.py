@@ -55,11 +55,20 @@ class Converter(object):
         obvious as it seems: the given datetime may have a different DST
         offset compared with the current time.
 
+        datetime objects that have no timezone indication are left
+        unchanged, since it is assumed they are already expressed in a
+        relevant timezone.
+
         For convenience, date objects are returned unchanged.
 
         """
         if is_datetime(dt):
-            return dt.astimezone(self.args.tz)
+            # Naive datetime, see
+            # https://docs.python.org/3/library/datetime.html#available-types
+            if dt.tzinfo == None or dt.tzinfo.utcoffset(dt) == None:
+                return dt
+            else:
+                return dt.astimezone(self.args.tz)
         elif is_date(dt):
             return dt
         else:

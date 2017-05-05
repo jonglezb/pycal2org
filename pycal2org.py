@@ -130,11 +130,21 @@ class Converter(object):
                 for prop_date in prop_dates:
                     # This is a vDDDLists
                     for vddd in prop_date.dts:
-                        dt = self.tz_localize(vddd.dt)
+                        dt = vddd.dt
+                        # EXDATE and RDATE are allowed to be dates,
+                        # convert them to datetime.  TODO: should the time
+                        # be midnight, or the time from DTSTART?
+                        if is_date(dt):
+                            dt = datetime.datetime.combine(dt, datetime.time())
+                        dt = self.tz_localize(dt)
                         ruleset.__getattribute__(prop)(dt)
             # We now have a ruleset that expands to a list of starting
             # date or datetime, one for each repetition.
             for dtstart_repeat in ruleset:
+                # Handle case where dtstart is a date, since rrule always
+                # returns datetime objects.
+                if is_date(dtstart):
+                    dtstart_repeat = dtstart_repeat.date()
                 # Compute matching dtend if applicable
                 if dtend == None:
                     dtend_repeat = None

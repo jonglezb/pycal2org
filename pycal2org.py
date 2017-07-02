@@ -4,11 +4,13 @@ import sys
 import os
 import datetime
 import argparse
+import itertools
 from string import Template
 
 import icalendar
 from dateutil import rrule, tz
 
+MAX_RECURRING_EVENTS = 20
 
 def is_date(dt):
     """A date is both an instance of date and datetime, so we need this extra
@@ -140,7 +142,7 @@ class Converter(object):
                         ruleset.__getattribute__(prop)(dt)
             # We now have a ruleset that expands to a list of starting
             # date or datetime, one for each repetition.
-            for dtstart_repeat in ruleset:
+            for dtstart_repeat in itertools.islice(ruleset, MAX_RECURRING_EVENTS):
                 # Handle case where dtstart is a date, since rrule always
                 # returns datetime objects.
                 if is_date(dtstart):

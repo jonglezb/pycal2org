@@ -8,10 +8,6 @@ org-mode calendar.
 It also supports recurring events, with proper handling of excluded dates and
 so on (using the excellent `dateutil.rrule` library).
 
-Note that, by default, all times are converted to the local (system) timezone,
-because org-mode has no support for specifying the timezone.  You can override
-the output timezone using the --tz option.
-
 ## Install
 
 pycal2org should support both Python3 (tested) and Python2 (untested).
@@ -20,6 +16,20 @@ It needs `dateutil` and `icalendar` as dependencies, you can install them using 
 package manager, or just install them locally:
 
     pip3 install --user -r requirements.txt
+
+## Usage
+
+Simply pass an ICS file as argument, and an org-mode file will be generated on
+stdout:
+
+    ./pycal2org.py foo.ics > foo.org
+
+Note that, by default, all times are converted to the local (system) timezone,
+because org-mode has no support for specifying the timezone.  You can override
+the output timezone using the --tz option.
+
+Additionally, you can provide a custom org-file template with the `--template`
+option.  See the default `template.org` for an example.
 
 ## Importing calendars from an URL
 

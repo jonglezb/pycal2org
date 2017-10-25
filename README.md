@@ -3,10 +3,10 @@
 This python script takes an .ics file as input, and generates an org-mode file
 containing the events.  Each event is presented in its own section, and date/time
 of events are also exported.  Thus, the output is suitable for use with the
-org-mode calendar
+org-mode calendar.
 
 It also supports recurring events, with proper handling of excluded dates and
-so on (using the excellent dateutil.rrule library).
+so on (using the excellent `dateutil.rrule` library).
 
 Note that, by default, all times are converted to the local (system) timezone,
 because org-mode has no support for specifying the timezone.  You can override
@@ -29,7 +29,6 @@ package manager, or just install them locally:
 
 ## TODO list
 
-- add more metadata to the output (event location, etc)
 - when fetching a remote ics source, merge it with the previous fetch
   (so that if some events have been removed in the remote source, we
   still have them locally)
